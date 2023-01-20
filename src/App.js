@@ -9,8 +9,23 @@ function App() {
       </h1>
 
       <AutoComplete></AutoComplete>
-      <div style={{ marginTop: "90vh", position: "absolute" }}>
-        <p style={{ opacity: "0.2" }}>developed by mohammad alzain</p>
+      <div
+        style={{
+          marginTop: "90vh",
+          position: "absolute",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        <p style={{ opacity: "0.2", marginRight: "6px" }}> developed by</p>
+        <a
+          target="_blank"
+          href="https://www.linkedin.com/in/mohammad-alzain/"
+          style={{ opacity: "0.2", color: "brown" }}
+        >
+          mohammad alzain
+        </a>
       </div>
     </div>
   );

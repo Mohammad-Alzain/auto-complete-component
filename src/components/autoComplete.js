@@ -10,6 +10,7 @@ function AutoComplete() {
   // Split text on higlight term, include term itself into parts, ignore case
   //-------------------------------------------------------------------------
   function getHighlightedText(text, higlight) {
+    if (text === "No results found") return text;
     var parts = text.split(new RegExp(`(${higlight})`, "gi"));
     return parts.map((part, index) => (
       <React.Fragment key={index}>
@@ -52,18 +53,23 @@ function AutoComplete() {
     //filter search result
     let filteredData = structuredClone(coppyData);
     filteredData = filteredData.filter(function (e, i, a) {
-      return (
-        (e.name + " ").search(search) != -1
-        //e.FirsName.search(SearchName) || e.lastName.search(SearchName) != -1
-      );
+      return (e.name + " ").search(search) != -1;
     });
-    setData(filteredData);
+    if (filteredData.length > 0) setData(filteredData);
+    else setData([{ name: "No results found" }]);
   }, [search]);
-
+  useEffect(() => {
+    const handler = () => setdisplayData(false);
+    window.addEventListener("click", handler);
+    return () => {
+      window.removeEventListener("click", handler);
+    };
+  });
   return (
     <div className={styles.container}>
       <input
-        onFocus={(e) => {
+        onClick={(e) => {
+          e.stopPropagation();
           setdisplayData(true);
         }}
         placeholder="search for name"
@@ -74,19 +80,14 @@ function AutoComplete() {
         }}
       ></input>
       {displayData ? (
-        <div
-          onClick={() => {
-            setdisplayData(false);
-          }}
-          style={{ width: "100vw", height: "100vh" }}
-        >
+        <div>
           <div className={styles.dataContainer}>
             {data.map((item, index) => {
               return (
                 <div
                   key={index}
                   onClick={() => {
-                    setSearch(item.name);
+                    if (item.name != "No results found") setSearch(item.name);
                   }}
                   className={styles.item}
                 >
